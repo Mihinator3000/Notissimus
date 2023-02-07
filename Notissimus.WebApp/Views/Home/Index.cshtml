@@ -1,0 +1,51 @@
+﻿@model Notissimus.Abstractions.Dto.OfferDto
+@{
+    ViewData["Title"] = "Offer Page";
+}
+
+<div class="container my-5">
+    <div class="card">
+        <div class="card-header">
+            @if (Model.Available)
+            {
+                <div>Offer @Model.Id</div>
+            }
+            else
+            {
+                <div class="disabled">Offer @Model.Id</div>
+                <div>Not Available</div>
+            }
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-2">
+                    <img class="img-thumbnail" src="https://picsum.photos/200/300" alt="offer picture" />
+                    <div class="card-text text-center mt-2">Price: @Model.Price @Model.CurrencyId</div>
+                </div>
+                <div class="col-md-10">
+                    <p class="card-text">@Model.Description</p>
+                    <a href="@Model.Url" class="btn btn-primary">View Offer</a>
+                </div>
+            </div>
+            <table class="table table-bordered table-striped mt-3 mb-0">
+                <tbody>
+                    @foreach (var property in Model.AdditionalProperties)
+                    {
+                        bool isBool = bool.TryParse(property.Value, out bool result);
+                        <tr>
+                            <td>@property.Name</td>
+                            @if (isBool)
+                            {
+                                <td>@(result ? "Available" : "Not Available")</td>
+                            }
+                            else
+                            {
+                                <td>@property.Value</td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
