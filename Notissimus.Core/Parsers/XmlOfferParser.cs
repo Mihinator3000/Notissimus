@@ -31,12 +31,16 @@ public class XmlOfferParser : IXmlOfferParser
 
         if (property is not null)
         {
-            object? propertyValue = Convert.ChangeType(value, property.PropertyType);
-            if (propertyValue is null)
+            try
+            {
+                object propertyValue = Convert.ChangeType(value, property.PropertyType);
+                property.SetValue(offer, propertyValue);
+                return;
+            }
+            catch (FormatException)
+            {
                 throw new XmlParseException($"Failed to parse property {name} with value {value}");
-
-            property.SetValue(offer, propertyValue);
-            return;
+            }
         }
 
         var additionalProperty = new OfferProperty(name, value);
