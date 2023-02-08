@@ -27,8 +27,15 @@ public class UrlXmlDocumentProvider : IXmlDocumentProvider
 
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
-        var xmlDocument = new XmlDocument();
-        xmlDocument.Load(stream);
-        return xmlDocument;
+        try
+        {
+            var xmlDocument = new XmlDocument();
+            xmlDocument.Load(stream);
+            return xmlDocument;
+        }
+        catch (XmlException)
+        {
+            throw new DataProviderException("Document is not in the correct xml format");
+        }
     }
 }
